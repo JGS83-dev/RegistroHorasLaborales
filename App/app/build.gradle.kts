@@ -4,6 +4,15 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        create("produccion") {
+            storeFile =
+                file("C:\\Users\\JGS\\Documents\\GitHub\\RegistroHorasLaborales\\App\\app\\utils\\firma.jks")
+            storePassword = "F1rm@Pr0dvcc10n"
+            keyAlias = "firma"
+            keyPassword = "F1rm@Pr0dvcc10n"
+        }
+    }
     namespace = "com.dsm.registro.biometrico"
     compileSdk = 34
 
@@ -49,6 +58,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
     implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
+    implementation("com.google.mlkit:face-detection:16.1.5")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
