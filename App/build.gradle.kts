@@ -8,7 +8,7 @@ android {
     signingConfigs {
         create("produccion") {
             storeFile =
-                file("C:\\Users\\JGS\\Documents\\GitHub\\RegistroHorasLaborales\\App\\app\\utils\\firma.jks")
+                file("C:\\Users\\JGS\\Documents\\GitHub\\RegistroHorasLaborales\\app\\utils\\firma.jks")
             storePassword = "F1rm@Pr0dvcc10n"
             keyAlias = "firma"
             keyPassword = "F1rm@Pr0dvcc10n"
