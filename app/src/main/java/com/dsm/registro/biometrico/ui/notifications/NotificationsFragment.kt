@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.dsm.registro.biometrico.databinding.FragmentNotificationsBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class NotificationsFragment : Fragment() {
 
@@ -28,10 +28,14 @@ class NotificationsFragment : Fragment() {
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textNotifications
-        notificationsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+        var CorreoLogin = binding.CorreoLogin
+        var PassLogin = binding.PassLogin
+        var Btn_Logeo = binding.BtnLogeo
+        var BtnRegistrarse = binding.BtnRegistrarse
+        var firebaseAuth = FirebaseAuth.getInstance()
+        var correo = ""
+        var password = ""
+
         return root
     }
 

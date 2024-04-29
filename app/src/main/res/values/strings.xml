@@ -1,6 +1,29 @@
 <resources>
-    <string name="app_name">RegistroHorasLaborales</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <!--Titulos-->
+    <string name="app_name">Registro Horas Laborales</string>
+    <string name="title_home">BIENVENIDO</string>
+    <string name="icon_home_title">Inicio</string>
+    <string name="title_dashboard">Ver todos los lugares </string>
+    <string name="icon_lugares_title">Lugares</string>
+    <string name="title_notifications">Iniciar Sesión</string>
+    <string name="icon_sesion_title">Iniciar Sesión</string>
+    <string name="title_crear_cuenta">Crear Cuenta</string>
+    <string name="title_informacion_lugar">Información Lugar de Trabajo</string>
+    <string name="title_crear_lugar">Crear Lugar de Trabajo</string>
+
+    <!--Registro-->
+    <string name="CrearCuentaTXT">Crear cuenta</string>
+    <string name="NombreEt">Nombres</string>
+    <string name="CorreoEt">Correo electrónico</string>
+    <string name="ContaseñaEt">Contraseña</string>
+    <string name="ConfirmarContraseñaEt">Confirmar contraseña</string>
+    <string name="RegistrarUsuario">Crear Cuenta</string>
+    <string name="TengounacuentaTXT">Iniciar sesión</string>
+
+    <!--Login-->
+    <string name="IniciarSesionTXT">Ingrese sus credenciales</string>
+    <string name="CorreoLogin">Correo</string>
+    <string name="PassLogin">Contraseña</string>
+    <string name="Btn_Logeo">Iniciar Sesión</string>
+    <string name="CrearCuenta">Crear Cuenta</string>
 </resources>
