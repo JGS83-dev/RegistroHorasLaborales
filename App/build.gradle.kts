@@ -70,4 +70,5 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-database:20.3.1")
     implementation ("com.airbnb.android:lottie:3.0.1")
+    implementation ("com.squareup.picasso:picasso:2.8")
 }
