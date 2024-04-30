@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.notifications.NotificationsFragment">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -21,8 +24,7 @@
             app:lottie_fileName="iniciar_sesion.json"
             app:lottie_loop="false"
             app:lottie_autoPlay="true"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"/>
+            android:layout_gravity="center" />
 
         <TextView
             android:text="@string/IniciarSesionTXT"
@@ -70,6 +72,7 @@
             android:text="@string/Btn_Logeo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginTop="10dp"/>
 
         <Button
@@ -77,9 +80,12 @@
             android:text="@string/CrearCuenta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"/>
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="50dp"/>
 
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
+    </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

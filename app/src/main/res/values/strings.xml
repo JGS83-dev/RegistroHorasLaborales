@@ -14,6 +14,7 @@
     <!--Registro-->
     <string name="CrearCuentaTXT">Información del perfil</string>
     <string name="NombreEt">Nombres</string>
+    <string name="ApellidoEt">Apellidos</string>
     <string name="CorreoEt">Correo electrónico</string>
     <string name="ContaseñaEt">Contraseña</string>
     <string name="ConfirmarContraseñaEt">Confirmar contraseña</string>
