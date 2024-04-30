@@ -87,7 +87,7 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     val user: FirebaseUser? = auth?.getCurrentUser()
-                    findNavController().navigate(R.id.action_navigation_notifications_to_navigation_home)
+                    findNavController().navigate(R.id.action_navigation_notifications_to_navigation_perfil_usuario)
                     if (user != null) {
                         Toast.makeText(
                             activity,

@@ -48,11 +48,10 @@ class PerfilUsuarioFragment : Fragment(R.layout.fragment_perfil_usuario) {
             Log.i("Informacion del usuario -> LLave",it.key.toString())
 
             Picasso.get().load(it.child("imagen").value.toString()).into(binding.imagenPerfil);
-            binding.nombre.text = binding.nombre.text.toString() + " " + it.child("nombres").value.toString()
-            binding.contrasenia.text = binding.contrasenia.text.toString() + " " + it.child("password").value.toString()
-            binding.apellido.text = binding.apellido.text.toString() + " " + it.child("apellidos").value.toString()
-            binding.correo.text = binding.correo.text.toString() + " " + it.child("correo").value.toString()
-            binding.nombre.text = binding.nombre.text.toString() + " " + it.child("nombres").value.toString()
+            binding.nombre.text = it.child("nombres").value.toString()
+            binding.contrasenia.text = it.child("password").value.toString()
+            binding.apellido.text = it.child("apellidos").value.toString()
+            binding.correo.text = it.child("correo").value.toString()
 
             BtnCerrarSesion!!.setOnClickListener {
                 firebaseAuth!!.signOut()
