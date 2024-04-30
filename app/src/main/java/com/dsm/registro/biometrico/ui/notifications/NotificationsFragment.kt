@@ -1,6 +1,5 @@
 package com.dsm.registro.biometrico.ui.notifications
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Patterns
@@ -9,18 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.dsm.registro.biometrico.R
 import com.dsm.registro.biometrico.databinding.FragmentNotificationsBinding
-import com.dsm.registro.biometrico.ui.home.HomeFragment
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
@@ -55,6 +49,7 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
 
         val currentUser = auth.currentUser
         if (currentUser != null) {
+            Toast.makeText(context, "Ya tiene una sesión activa", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_navigation_notifications_to_navigation_home)
         }
 
@@ -68,8 +63,7 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
         Btn_Logeo!!.setOnClickListener { ValidarDatos() }
 
         BtnRegistrarse!!.setOnClickListener(View.OnClickListener {
-            Toast.makeText(context, "Ya tiene una sesión activa", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.action_navigation_notifications_to_navigation_dashboard)
+            findNavController().navigate(R.id.action_navigation_notifications_to_navigation_registrarse)
         })
 
         return root

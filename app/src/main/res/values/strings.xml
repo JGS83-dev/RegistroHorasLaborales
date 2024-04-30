@@ -12,7 +12,7 @@
     <string name="title_crear_lugar">Crear Lugar de Trabajo</string>
 
     <!--Registro-->
-    <string name="CrearCuentaTXT">Crear cuenta</string>
+    <string name="CrearCuentaTXT">Información del perfil</string>
     <string name="NombreEt">Nombres</string>
     <string name="CorreoEt">Correo electrónico</string>
     <string name="ContaseñaEt">Contraseña</string>
