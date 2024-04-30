@@ -168,19 +168,26 @@ class RegistrarseFragment : Fragment(R.layout.fragment_registrarse) {
         uploadTask.addOnFailureListener {
             Log.e("Error al subir imagen", it.message.toString())
         }.addOnSuccessListener { taskSnapshot ->
-            Log.e("Exito al subir imagen", taskSnapshot.toString())
-            Datos["imagen"] = taskSnapshot.metadata?.path
-        }
 
-        val databaseReference = FirebaseDatabase.getInstance().getReference("Usuarios")
-        databaseReference.child(uid!!)
-            .setValue(Datos)
-            .addOnSuccessListener {
-                Toast.makeText(context, "Cuenta creada con éxito", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_navigation_notifications_to_navigation_perfil_usuario)
-            }.addOnFailureListener { e ->
-                Toast.makeText(context, "Ocurrio un error al crear cuenta. " + e.message, Toast.LENGTH_SHORT).show()
+            imagenUsuarioRef.downloadUrl.addOnCompleteListener {
+                Log.i("Exito al subir imagen", it.result.toString())
+                Datos["imagen"] = it.result.toString()
+                val databaseReference = FirebaseDatabase.getInstance().getReference("Usuarios")
+                databaseReference.child(uid!!)
+                    .setValue(Datos)
+                    .addOnSuccessListener {
+                        Toast.makeText(context, "Cuenta creada con éxito", Toast.LENGTH_SHORT)
+                            .show()
+                        findNavController().navigate(R.id.action_navigation_registrarse_to_navigation_perfil_usuario)
+                    }.addOnFailureListener { e ->
+                        Toast.makeText(
+                            context,
+                            "Ocurrio un error al crear cuenta. " + e.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
             }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
