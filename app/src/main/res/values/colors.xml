@@ -11,8 +11,5 @@
     <color name="colorSecondaryVariant">#FF000000</color>
     <color name="colorOnSecondary">#FFFFFFFF</color>
 
-    <color name="statusBarColor">#6C6F7F</color>
-
-
-
+    <color name="statusBarColor">#5C6672</color>
 </resources>
