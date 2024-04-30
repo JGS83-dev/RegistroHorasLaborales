@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/EstiloContenedorPrincipal"
     tools:context=".ui.notifications.NotificationsFragment">
 
     <ScrollView
@@ -22,6 +23,7 @@
             android:layout_height="200dp"
             app:lottie_imageAssetsFolder="assets"
             app:lottie_fileName="iniciar_sesion.json"
+            android:background="#5C6672"
             app:lottie_loop="false"
             app:lottie_autoPlay="true"
             android:layout_gravity="center" />
@@ -30,8 +32,7 @@
             android:text="@string/IniciarSesionTXT"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:gravity="center"/>
+            style="@style/EstiloSubTitulosContenido" />
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -73,6 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="@style/EstiloBotones"
             android:layout_marginTop="10dp"/>
 
         <Button
@@ -81,6 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="@style/EstiloBotones"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="50dp"/>
 

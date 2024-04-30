@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/EstiloContenedorPrincipal"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.cuenta.RegistrarseFragment">
 
@@ -23,6 +24,7 @@
             app:lottie_imageAssetsFolder="assets"
             app:lottie_fileName="registro.json"
             app:lottie_loop="false"
+            android:background="#5C6672"
             app:lottie_autoPlay="true"
             android:layout_gravity="center"
             android:layout_weight="1"/>
@@ -133,7 +135,7 @@
             android:id="@+id/RegistrarUsuario"
             android:text="@string/RegistrarUsuario"
             android:layout_marginTop="15dp"
-            android:textSize="18sp"
+            style="@style/EstiloBotones"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -144,7 +146,7 @@
             android:text="@string/TengounacuentaTXT"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="50dp"
-            android:textSize="18sp"
+            style="@style/EstiloBotones"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
