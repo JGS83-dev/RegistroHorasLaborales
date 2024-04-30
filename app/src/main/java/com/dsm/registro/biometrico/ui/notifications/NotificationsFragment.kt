@@ -50,7 +50,7 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             Toast.makeText(context, "Ya tiene una sesión activa", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.action_navigation_notifications_to_navigation_home)
+            findNavController().navigate(R.id.action_navigation_notifications_to_navigation_perfil_usuario)
         }
 
         CorreoLogin = binding.CorreoLogin

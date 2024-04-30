@@ -177,7 +177,7 @@ class RegistrarseFragment : Fragment(R.layout.fragment_registrarse) {
             .setValue(Datos)
             .addOnSuccessListener {
                 Toast.makeText(context, "Cuenta creada con éxito", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_navigation_registrarse_to_navigation_home)
+                findNavController().navigate(R.id.action_navigation_notifications_to_navigation_perfil_usuario)
             }.addOnFailureListener { e ->
                 Toast.makeText(context, "Ocurrio un error al crear cuenta. " + e.message, Toast.LENGTH_SHORT).show()
             }

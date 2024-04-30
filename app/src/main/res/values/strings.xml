@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!--Titulos-->
     <string name="app_name">Registro Horas Laborales</string>
     <string name="title_home">BIENVENIDO</string>
@@ -20,6 +20,15 @@
     <string name="ConfirmarContraseñaEt">Confirmar contraseña</string>
     <string name="RegistrarUsuario">Crear Cuenta</string>
     <string name="TengounacuentaTXT">Iniciar sesión</string>
+
+    <!--Cuenta-->
+    <string name="cerrar_sesion">Cerrar sesión</string>
+    <string name="foto">Foto de Perfil</string>
+    <string name="perfil_usuario">Información de la cuenta</string>
+    <string name="nombre">Nombres: </string>
+    <string name="contrasenia">Contraseña:</string>
+    <string name="correo">Correo:</string>
+    <string name="apellido">Apellidos:</string>
 
     <!--Login-->
     <string name="IniciarSesionTXT">Ingrese sus credenciales</string>
