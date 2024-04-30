@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/EstiloContenedorPrincipal"
     tools:context=".ui.cuenta.PerfilUsuarioFragment">
 
     <ScrollView
@@ -12,14 +13,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:orientation="vertical">
 
             <TextView
                 android:text="@string/foto"
+                style="@style/EstiloTitulos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
                 android:gravity="left"/>
 
             <ImageView
@@ -28,55 +28,120 @@
                 android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 tools:src="@tools:sample/avatars" />
+
 
             <TextView
                 android:text="@string/CrearCuentaTXT"
+                style="@style/EstiloTitulos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:gravity="left"
-                android:layout_marginBottom="10dp"/>
+                android:gravity="left"/>
 
-            <TextView
-                android:id="@+id/correo"
-                android:text="@string/correo"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:gravity="center"/>
+                android:padding="10dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/nombre"
-                android:text="@string/nombre"
+                <TextView
+                    android:text="@string/correo"
+                    style="@style/EstiloLabels"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="3"/>
+
+                <TextView
+                    android:id="@+id/correo"
+                    android:text=""
+                    style="@style/EstiloContenido"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_weight="3"/>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:gravity="center"/>
+                android:padding="10dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/apellido"
-                android:text="@string/apellido"
+                <TextView
+                    android:text="@string/nombre"
+                    style="@style/EstiloLabels"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="3"/>
+
+                <TextView
+                    android:id="@+id/nombre"
+                    android:text=""
+                    style="@style/EstiloContenido"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_weight="3"/>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:gravity="center"/>
+                android:padding="10dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/contrasenia"
-                android:text="@string/contrasenia"
+                <TextView
+                    android:text="@string/apellido"
+                    style="@style/EstiloLabels"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="3"/>
+
+                <TextView
+                    android:id="@+id/apellido"
+                    android:text=""
+                    style="@style/EstiloContenido"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_weight="3"/>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:gravity="center"/>
+                android:padding="10dp"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:text="@string/contrasenia"
+                    style="@style/EstiloLabels"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="3"/>
+
+                <TextView
+                    android:id="@+id/contrasenia"
+                    android:text=""
+                    style="@style/EstiloContenido"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_weight="3"/>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btnCerrarSesion"
+                style="@style/EstiloBotones"
                 android:text="@string/cerrar_sesion"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="50dp"
-                android:textSize="18sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
