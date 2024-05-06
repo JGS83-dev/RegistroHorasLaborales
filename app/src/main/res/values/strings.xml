@@ -22,6 +22,7 @@
     <string name="TengounacuentaTXT">Iniciar sesión</string>
 
     <!--Cuenta-->
+    <string name="tomar_biometria">Foto de perfil biometrico</string>
     <string name="cerrar_sesion">Cerrar sesión</string>
     <string name="foto">Foto de Perfil</string>
     <string name="perfil_usuario">Información de la cuenta</string>

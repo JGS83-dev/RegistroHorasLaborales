@@ -147,6 +147,17 @@
                 android:layout_gravity="center"
                 android:layout_weight="2"/>
 
+            <Button
+                android:id="@+id/btnTomarDatosBiometricos"
+                style="@style/EstiloBotones"
+                android:text="@string/tomar_biometria"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="50dp"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"/>
+
         </LinearLayout>
     </ScrollView>
 

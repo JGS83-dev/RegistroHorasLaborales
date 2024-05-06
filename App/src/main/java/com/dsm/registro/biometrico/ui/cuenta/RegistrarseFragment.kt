@@ -22,6 +22,7 @@ import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
 import com.dsm.registro.biometrico.R
 import com.dsm.registro.biometrico.databinding.FragmentRegistrarseBinding
+import com.dsm.registro.biometrico.utils.Utils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
@@ -62,27 +63,10 @@ class RegistrarseFragment : Fragment(R.layout.fragment_registrarse) {
 
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
-            uriImagen = context?.let { getRealPathFromURI(it,uri) }
+            uriImagen = context?.let { Utils.getRealPathFromURI(it,uri) }
             Log.d("PhotoPicker", "Selected URI: $uri")
         } else {
             Log.d("PhotoPicker", "No media selected")
-        }
-    }
-
-    private fun getRealPathFromURI(context: Context, contentUri: Uri): String? {
-        var cursor: Cursor? = null
-        return try {
-            val proj = arrayOf(MediaStore.Images.Media.DATA)
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null)
-            val column_index: Int = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            cursor.moveToFirst()
-//            Log.i("Real Path Imagen ->",cursor.getString(column_index))
-            cursor.getString(column_index)
-        } catch (e: Exception) {
-            Log.e("Fallo al obtener URI: ", "getRealPathFromURI Exception : $e")
-            ""
-        } finally {
-            cursor?.close()
         }
     }
 
@@ -159,6 +143,7 @@ class RegistrarseFragment : Fragment(R.layout.fragment_registrarse) {
         Datos["nombres"] = nombre
         Datos["apellidos"] = apellido
         Datos["password"] = password
+        Datos["biometria"] = ""
 
         val storageRef = storage!!.reference
         val imagenUsuarioRef = storageRef.child("/imagenes/usuarios/$uid/perfil")
