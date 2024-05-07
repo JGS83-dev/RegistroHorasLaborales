@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.lugares.RegistrarDireccion">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="@string/input_completar"
+                style="@style/EstiloTitulos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"/>
+
+            <TextView
+                android:text="@string/input_foto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:gravity="left"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/agregarImagenBtn"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                app:lottie_imageAssetsFolder="assets"
+                app:lottie_fileName="imagen.json"
+                app:lottie_loop="false"
+                android:background="#5C6672"
+                app:lottie_autoPlay="true"
+                android:layout_gravity="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:text="@string/input_ingresar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:gravity="left"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/txtDiaActividad"
+                    android:hint="@string/input_dia"
+                    android:inputType="date"
+                    android:padding="20dp"
+                    android:drawablePadding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/txtHoraEntrada"
+                    android:hint="@string/input_hora_entrada"
+                    android:inputType="time"
+                    android:padding="20dp"
+                    android:drawablePadding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/txtHoraSalida"
+                    android:hint="@string/input_hora_salida"
+                    android:inputType="time"
+                    android:padding="20dp"
+                    android:drawablePadding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:hintEnabled="false"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/txtNombreLugar"
+                    android:hint="@string/input_nombre_lugar"
+                    android:inputType="text"
+                    android:padding="20dp"
+                    android:drawablePadding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:hintEnabled="false"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/txtUbicacion"
+                    android:hint="@string/input_ubicacion"
+                    android:inputType="text"
+                    android:padding="20dp"
+                    android:drawablePadding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btnGuardar"
+                android:text="@string/btn_guardar"
+                android:layout_marginTop="15dp"
+                style="@style/EstiloBotones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"/>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>
