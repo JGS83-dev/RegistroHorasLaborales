@@ -14,8 +14,16 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.dsm.registro.biometrico.R
+import com.dsm.registro.biometrico.clases.LugarTrabajo
+import com.dsm.registro.biometrico.clases.adapters.LugarTrabajoAdapter
 import com.dsm.registro.biometrico.databinding.FragmentHomeBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -24,6 +32,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    lateinit var database: DatabaseReference
+    lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,12 +44,39 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             ViewModelProvider(this).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
         val root: View = binding.root
+        firebaseAuth = FirebaseAuth.getInstance()
 
         if (allPermissionsGranted()) {
             Log.i("Permisos","Se han concedido los permisos")
         } else {
             ActivityCompat.requestPermissions(requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+        }
+
+        database = Firebase.database.reference
+        var lugares = ArrayList<LugarTrabajo>()
+        val uid = firebaseAuth!!.currentUser?.uid.toString()
+        database.child("Direcciones").child(uid).get().addOnSuccessListener {
+            it.children.forEach{
+                val lugar = "${it.child("latitud").value.toString()} , ${it.child("longitud").value.toString()}"
+                lugares.add(LugarTrabajo(
+                    it.key.toString(),
+                    it.child("nombre").value.toString(),
+                    lugar,
+                    it.child("entrada").value.toString(),
+                    it.child("salida").value.toString(),
+                    it.child("estado").value.toString()))
+            }
+
+            val recyclerViewLugares: RecyclerView = binding.recyclerHoy
+            recyclerViewLugares.layoutManager = LinearLayoutManager(context)
+
+            val lugaresAdapter = LugarTrabajoAdapter(requireContext(),lugares);
+
+            recyclerViewLugares.adapter = lugaresAdapter
+        }.addOnFailureListener{
+            Log.e("firebase", "Error getting data", it)
         }
 
         return root

@@ -69,6 +69,7 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
     var storage: FirebaseStorage? = null
     var timePicker: TimePickerDialog? = null
     var datePicker: DatePickerDialog? = null
+    val Datos = HashMap<String, String?>()
 
     private lateinit var database: DatabaseReference
     private val binding get() = _binding!!
@@ -169,6 +170,8 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
                     fusedLocationClient.getCurrentLocation(100, cancellationTokenSource.token)
                         .addOnSuccessListener { location ->
                             Log.d("Location", "Ubicacion actual ${location.altitude} , ${location.longitude}")
+                            Datos["latitud"] = location.altitude.toString()
+                            Datos["longitud"] = location.longitude.toString()
                             Toast.makeText(context,
                                 "Ubicacion actual obtenida exitosamente",
                                 Toast.LENGTH_LONG).show()
@@ -213,7 +216,6 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
 
     private fun CrearRegistro() {
         val uid = firebaseAuth!!.currentUser?.uid.toString()
-        val Datos = HashMap<String, String?>()
         Datos["uid"] = uid
         Datos["dia"] = dia
         Datos["entrada"] = entrada

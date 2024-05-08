@@ -6,18 +6,73 @@
     android:layout_height="match_parent"
     style="@style/EstiloContenedorPrincipal"
     tools:context=".ui.home.HomeFragment">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/text_home"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:text="@string/titulo_hoy"
+                style="@style/EstiloTitulos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerHoy"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="3"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:scrollbars="vertical" />
+
+            <TextView
+                android:text="@string/titulo_recientes"
+                style="@style/EstiloTitulos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerRecientes"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="3"
+                android:scrollbars="vertical" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnCerrarSesion"
+                    style="@style/EstiloBotones"
+                    android:text="@string/Btn_Logeo"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"/>
+
+                <Button
+                    android:id="@+id/btnCrearCuenta"
+                    style="@style/EstiloBotones"
+                    android:text="@string/CrearCuenta"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
