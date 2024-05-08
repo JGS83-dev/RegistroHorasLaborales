@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.dsm.registro.biometrico.R
 import com.dsm.registro.biometrico.databinding.FragmentDashboardBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 
 class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
@@ -20,6 +23,8 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private val binding get() = _binding!!
     var BtnAgregar: Button? = null
     var BtnBuscar: Button? = null
+    var firebaseAuth: FirebaseAuth? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,8 +39,14 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         BtnAgregar = binding.btnAgregar
         BtnBuscar = binding.btnBuscar
 
+        firebaseAuth = FirebaseAuth.getInstance()
+
         BtnAgregar!!.setOnClickListener {
-            findNavController().navigate(R.id.action_navigation_dashboard_to_navigation_registrar_direccion)
+            if(firebaseAuth!!.currentUser != null){
+                findNavController().navigate(R.id.action_navigation_dashboard_to_navigation_registrar_direccion)
+            }else{
+                Toast.makeText(context,"Debe iniciar sesión para realizar esta acción",Toast.LENGTH_LONG).show()
+            }
         }
 
         return root
