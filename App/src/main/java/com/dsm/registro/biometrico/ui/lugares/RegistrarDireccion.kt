@@ -1,18 +1,11 @@
 package com.dsm.registro.biometrico.ui.lugares
 
-import android.content.Context
-import android.content.Intent
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationManager
-import android.net.Uri
-import android.os.Build
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +16,8 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
 import com.dsm.registro.biometrico.R
@@ -39,6 +34,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import java.io.File
 import java.io.FileInputStream
+import java.util.Calendar
+
 
 class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
 
@@ -70,6 +67,8 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
 
     var firebaseAuth: FirebaseAuth? = null
     var storage: FirebaseStorage? = null
+    var timePicker: TimePickerDialog? = null
+    var datePicker: DatePickerDialog? = null
 
     private lateinit var database: DatabaseReference
     private val binding get() = _binding!!
@@ -97,6 +96,57 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
 
         firebaseAuth = FirebaseAuth.getInstance()
         storage = Firebase.storage
+
+        DiaAsistenciaEt = binding.txtDiaActividad
+        HoraEntradaEt = binding.txtHoraEntrada
+        HoraSalidaEt = binding.txtHoraSalida
+        NombreDireccionEt = binding.txtNombreLugar
+
+        HoraEntradaEt!!.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val hour: Int = calendar.get(Calendar.HOUR_OF_DAY)
+            val minutes: Int = calendar.get(Calendar.MINUTE)
+
+            timePicker = TimePickerDialog(
+                requireContext(),
+                { tp, sHour, sMinute -> HoraEntradaEt!!.setText("$sHour:$sMinute") },
+                hour,
+                minutes,
+                true
+            )
+            timePicker!!.show()
+        }
+
+        DiaAsistenciaEt!!.setOnClickListener {
+            val c = Calendar.getInstance()
+            val year = c.get(Calendar.YEAR)
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+
+            datePicker = DatePickerDialog(
+                requireContext(),
+
+                DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                    val mes = monthOfYear +1
+                    DiaAsistenciaEt!!.setText("$dayOfMonth/$mes/$year")
+                },
+                year,
+                day,
+                month
+            )
+            datePicker!!.show()
+        }
+
+        HoraSalidaEt!!.setOnClickListener{
+            val calendar = Calendar.getInstance()
+            val hour: Int = calendar.get(Calendar.HOUR_OF_DAY)
+            val minutes: Int = calendar.get(Calendar.MINUTE)
+
+            timePicker = TimePickerDialog(requireContext(),
+                { tp, sHour, sMinute -> HoraSalidaEt!!.setText("$sHour:$sMinute") }, hour, minutes, true
+            )
+            timePicker!!.show()
+        }
 
         BtnImagenReferencia!!.setOnClickListener {
             Toast.makeText(context, "Seleccione imagen de referencia del lugar", Toast.LENGTH_SHORT).show()
@@ -192,7 +242,7 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
                     .addOnSuccessListener {
                         Toast.makeText(context, "Dirección de trabajo registrada con éxito", Toast.LENGTH_SHORT)
                             .show()
-                        findNavController().navigate(R.id.action_navigation_registrarse_to_navigation_perfil_usuario)
+                        findNavController().navigate(R.id.action_navigation_registrar_direccion_to_navigation_home)
                     }.addOnFailureListener { e ->
                         Toast.makeText(
                             context,
