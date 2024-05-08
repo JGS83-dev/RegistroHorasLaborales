@@ -59,7 +59,7 @@ class RegistrarseFragment : Fragment(R.layout.fragment_registrarse) {
     var correo = " "
     var password = ""
     var confirmarpassword = ""
-    var uriImagen: String? = null
+    var uriImagen: String? = ""
 
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
@@ -119,6 +119,8 @@ class RegistrarseFragment : Fragment(R.layout.fragment_registrarse) {
             Toast.makeText(context, "Confirme contraseña", Toast.LENGTH_SHORT).show()
         } else if (password != confirmarpassword) {
             Toast.makeText(context, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+        } else  if (TextUtils.isEmpty(uriImagen)) {
+            Toast.makeText(context, "Ingrese imagen de perfil", Toast.LENGTH_SHORT).show()
         } else {
             CrearCuenta()
         }

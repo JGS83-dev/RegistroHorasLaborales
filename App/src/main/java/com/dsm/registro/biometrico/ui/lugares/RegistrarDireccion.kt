@@ -9,21 +9,36 @@ import android.net.Uri
 import android.os.Build
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
+import com.airbnb.lottie.LottieAnimationView
 import com.dsm.registro.biometrico.R
 import com.dsm.registro.biometrico.databinding.FragmentRegistrarDireccionBinding
+import com.dsm.registro.biometrico.utils.Utils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
+import java.io.File
+import java.io.FileInputStream
 
 class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
 
@@ -41,9 +56,33 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
     private var _binding: FragmentRegistrarDireccionBinding? = null
     var BtnGuardar: Button? = null
     var BtnUbicacion: Button? = null
+    var BtnImagenReferencia: LottieAnimationView? = null
+    var DiaAsistenciaEt: EditText? = null
+    var HoraEntradaEt: EditText? = null
+    var HoraSalidaEt: EditText? = null
+    var NombreDireccionEt: EditText? = null
+
+    var dia = " "
+    var entrada = " "
+    var salida = " "
+    var nombre = ""
+    var uriImagen: String? = ""
+
+    var firebaseAuth: FirebaseAuth? = null
+    var storage: FirebaseStorage? = null
+
     private lateinit var database: DatabaseReference
     private val binding get() = _binding!!
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            uriImagen = context?.let { Utils.getRealPathFromURI(it,uri) }
+            Log.d("PhotoPicker", "Selected URI: $uri")
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +93,15 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
 
         BtnGuardar = binding.btnGuardar
         BtnUbicacion = binding.btnDireccion
+        BtnImagenReferencia = binding.agregarImagenBtn
+
+        firebaseAuth = FirebaseAuth.getInstance()
+        storage = Firebase.storage
+
+        BtnImagenReferencia!!.setOnClickListener {
+            Toast.makeText(context, "Seleccione imagen de referencia del lugar", Toast.LENGTH_SHORT).show()
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
 
         BtnUbicacion!!.setOnClickListener {
             Log.d("Location", "Solicitando ubicacion actual")
@@ -88,7 +136,72 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
             }
         }
 
+        BtnGuardar!!.setOnClickListener {
+            ValidarDatos()
+        }
+
         return root
+    }
+    private fun ValidarDatos() {
+        dia = DiaAsistenciaEt!!.text.toString()
+        entrada = HoraEntradaEt!!.text.toString()
+        salida = HoraSalidaEt!!.text.toString()
+        nombre = NombreDireccionEt!!.text.toString()
+
+        if (TextUtils.isEmpty(dia)) {
+            Toast.makeText(context, "Ingrese día de asistencia", Toast.LENGTH_SHORT).show()
+        } else if (TextUtils.isEmpty(entrada)) {
+            Toast.makeText(context, "Ingrese hora de entrada", Toast.LENGTH_SHORT).show()
+        } else if (TextUtils.isEmpty(salida)) {
+            Toast.makeText(context, "Ingrese hora de salida", Toast.LENGTH_SHORT).show()
+        } else if (TextUtils.isEmpty(nombre)) {
+            Toast.makeText(context, "Ingrese nombre de la dirección", Toast.LENGTH_SHORT).show()
+        }else {
+            CrearRegistro()
+        }
+    }
+
+    private fun CrearRegistro() {
+        val uid = firebaseAuth!!.currentUser?.uid.toString()
+        val Datos = HashMap<String, String?>()
+        Datos["uid"] = uid
+        Datos["dia"] = dia
+        Datos["entrada"] = entrada
+        Datos["entrada_real"] = ""
+        Datos["salida_real"] = ""
+        Datos["salida"] = salida
+        Datos["nombre"] = nombre
+        Datos["estado"] = "pendiente"
+
+        val storageRef = storage!!.reference
+        val imagenUsuarioRef = storageRef.child("/imagenes/usuarios/$uid/perfil")
+        val stream = FileInputStream(uriImagen?.let { File(it) })
+        var uploadTask = imagenUsuarioRef.putStream(stream)
+
+        uploadTask.addOnFailureListener {
+            Log.e("Error al subir imagen", it.message.toString())
+        }.addOnSuccessListener { taskSnapshot ->
+
+            imagenUsuarioRef.downloadUrl.addOnCompleteListener {
+                Log.i("Exito al subir imagen", it.result.toString())
+                Datos["imagen"] = it.result.toString()
+                val databaseReference = FirebaseDatabase.getInstance().getReference("Direcciones")
+                databaseReference.child(uid!!)
+                    .push()
+                    .setValue(Datos)
+                    .addOnSuccessListener {
+                        Toast.makeText(context, "Dirección de trabajo registrada con éxito", Toast.LENGTH_SHORT)
+                            .show()
+                        findNavController().navigate(R.id.action_navigation_registrarse_to_navigation_perfil_usuario)
+                    }.addOnFailureListener { e ->
+                        Toast.makeText(
+                            context,
+                            "Ocurrio un error al registrar dirección de trabajo. " + e.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+            }
+        }
     }
 
 
