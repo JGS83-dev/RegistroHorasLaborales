@@ -27,6 +27,7 @@
     <string name="foto">Foto de Perfil</string>
     <string name="perfil_usuario">Información de la cuenta</string>
     <string name="nombre">Nombres: </string>
+    <string name="direccion_trabajo">Crear lugar de trabajo</string>
     <string name="contrasenia">Contraseña:</string>
     <string name="correo">Correo:</string>
     <string name="apellido">Apellidos:</string>
@@ -50,7 +51,7 @@
     <string name="input_hora_entrada">Ingrese hora de entrada:</string>
     <string name="input_hora_salida">Ingrese hora de salida:</string>
     <string name="input_nombre_lugar">Ingrese nombre de la dirección:</string>
-    <string name="input_ubicacion">Ingrese ubicación:</string>
+    <string name="input_ubicacion">Ubicación actual</string>
     <string name="input_foto">Foto de referencia del lugar</string>
 
 

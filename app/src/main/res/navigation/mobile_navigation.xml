@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_navigation_dashboard_to_navigation_home"
             app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_navigation_dashboard_to_navigation_registrar_direccion"
+            app:destination="@id/navigation_registrar_direccion" />
     </fragment>
 
     <fragment
@@ -71,6 +74,18 @@
             app:destination="@id/navigation_notifications" />
         <action
             android:id="@+id/action_navigation_perfil_usuario_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_registrar_direccion"
+        android:name="com.dsm.registro.biometrico.ui.lugares.RegistrarDireccion"
+        android:label="@string/direccion_trabajo"
+        tools:layout="@layout/fragment_registrar_direccion" >
+        <action
+            android:id="@+id/action_navigation_registrar_direccion_to_navigation_dashboard"
+            app:destination="@id/navigation_dashboard" />
+        <action
+            android:id="@+id/action_navigation_registrar_direccion_to_navigation_home"
             app:destination="@id/navigation_home" />
     </fragment>
 </navigation>
