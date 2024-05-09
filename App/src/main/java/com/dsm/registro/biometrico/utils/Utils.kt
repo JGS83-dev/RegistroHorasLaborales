@@ -3,8 +3,13 @@ package com.dsm.registro.biometrico.utils
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import androidx.annotation.RequiresApi
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class Utils {
 
@@ -24,6 +29,12 @@ class Utils {
             } finally {
                 cursor?.close()
             }
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun getNowDate(): String {
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            return LocalDate.now().format(formatter)
         }
     }
 }

@@ -88,4 +88,9 @@
             android:id="@+id/action_navigation_registrar_direccion_to_navigation_home"
             app:destination="@id/navigation_home" />
     </fragment>
+    <fragment
+        android:id="@+id/informacionDireccionFragment"
+        android:label="@string/informacion_lugar"
+        android:name="com.dsm.registro.biometrico.ui.lugares.InformacionDireccionFragment"
+        tools:layout="@layout/fragment_informacion_direccion" />
 </navigation>

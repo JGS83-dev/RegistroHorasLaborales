@@ -110,7 +110,7 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
 
             timePicker = TimePickerDialog(
                 requireContext(),
-                { tp, sHour, sMinute -> HoraEntradaEt!!.setText("$sHour:$sMinute") },
+                { tp, sHour, sMinute -> HoraEntradaEt!!.setText(String.format("%02d:%02d", sHour, sMinute)) },
                 hour,
                 minutes,
                 true
@@ -129,7 +129,7 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
 
                 DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                     val mes = monthOfYear +1
-                    DiaAsistenciaEt!!.setText("$dayOfMonth/$mes/$year")
+                    DiaAsistenciaEt!!.setText(String.format("%02d/%02d/%04d", dayOfMonth, mes,year))
                 },
                 year,
                 day,
@@ -144,7 +144,7 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
             val minutes: Int = calendar.get(Calendar.MINUTE)
 
             timePicker = TimePickerDialog(requireContext(),
-                { tp, sHour, sMinute -> HoraSalidaEt!!.setText("$sHour:$sMinute") }, hour, minutes, true
+                { tp, sHour, sMinute -> HoraSalidaEt!!.setText(String.format("%02d:%02d", sHour, sMinute)) }, hour, minutes, true
             )
             timePicker!!.show()
         }

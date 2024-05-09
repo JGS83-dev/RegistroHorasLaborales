@@ -5,12 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.dsm.registro.biometrico.R
 import com.dsm.registro.biometrico.clases.LugarTrabajo
 
-class LugarTrabajoAdapter (private val context:Context, private val dataSet: List<LugarTrabajo>) :
+class LugarTrabajoAdapter (private val context:Context, private val dataSet: List<LugarTrabajo>,private val listener:LugarTrabajoListener) :
     RecyclerView.Adapter<LugarTrabajoAdapter.ViewHolder>(){
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -37,12 +36,16 @@ class LugarTrabajoAdapter (private val context:Context, private val dataSet: Lis
         val lugarTrabajo: LugarTrabajo = dataSet.get(position)
         holder.txtNombre.setText(lugarTrabajo.nombre)
         holder.txtLugar.setText(lugarTrabajo.lugar)
-        holder.txtHoraInicio.setText(lugarTrabajo.horaInicio)
-        holder.txtHoraFin.setText(lugarTrabajo.horaFin)
+        holder.txtHoraInicio.setText(lugarTrabajo.entrada)
+        holder.txtHoraFin.setText(lugarTrabajo.salida)
 
         holder.txtMasInfo.setOnClickListener{
-            Toast.makeText(context,"Enviando a vista de lugar...",Toast.LENGTH_LONG).show()
+            listener.onItemClick(dataSet.get(position))
         }
+    }
+
+    interface LugarTrabajoListener {
+        fun onItemClick(lugarTrabajo: LugarTrabajo)
     }
 
     override fun getItemCount() = dataSet.size

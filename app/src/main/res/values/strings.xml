@@ -26,6 +26,7 @@
     <string name="cerrar_sesion">Cerrar sesión</string>
     <string name="foto">Foto de Perfil</string>
     <string name="perfil_usuario">Información de la cuenta</string>
+    <string name="informacion_lugar">Información lugar de trabajo</string>
     <string name="nombre">Nombres: </string>
     <string name="direccion_trabajo">Crear lugar de trabajo</string>
     <string name="contrasenia">Contraseña:</string>
@@ -54,6 +55,11 @@
     <string name="input_ubicacion">Ubicación actual</string>
     <string name="input_foto">Foto de referencia del lugar</string>
 
+
+    <string name="titulo_informacion_lugar">Información lugar de trabajo</string>
+    <string name="btn_tomar_biometria">Tomar Datos Biometricos</string>
+    <string name="sub_titulo_informacion_lugar">Información</string>
+
     <!--Inicio-->
     <string name="titulo_hoy">Planificado para hoy</string>
     <string name="titulo_recientes">Recientes</string>
@@ -61,6 +67,7 @@
     <string name="btn_mas_info">Más info</string>
     <string name="lbl_nombre">Nombre:</string>
     <string name="lbl_lugar">Lugar:</string>
+    <string name="lbl_ubicacion">Ubicación:</string>
     <string name="lbl_hora_inicio">Hora Inicio:</string>
     <string name="lbl_hora_inicio_real">Hora Inicio Real:</string>
     <string name="lbl_hora_fin">Hora Fin:</string>

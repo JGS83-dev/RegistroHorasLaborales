@@ -1,14 +1,18 @@
 package com.dsm.registro.biometrico.clases
 
 class LugarTrabajo {
-    var id: String = ""
+    var uid: String = ""
+    var dia: String = ""
     var nombre: String = ""
     var lugar: String = ""
-    var horaInicio: String = ""
-    var horaInicioReal: String = ""
-    var horaFin: String = ""
-    var horaFinReal: String = ""
+    var entrada: String = ""
+    var entrada_real: String = ""
+    var salida: String = ""
+    var salida_real: String = ""
     var estado: String = ""
+    var latitud:String =""
+    var longitud:String =""
+    var imagen:String=""
 
     constructor(
         id: String,
@@ -20,13 +24,13 @@ class LugarTrabajo {
         horaFinReal: String,
         estado: String
     ) {
-        this.id = id
+        this.uid = id
         this.nombre = nombre
         this.lugar = lugar
-        this.horaInicio = horaInicio
-        this.horaInicioReal = horaInicioReal
-        this.horaFin = horaFin
-        this.horaFinReal = horaFinReal
+        this.entrada = horaInicio
+        this.entrada_real = horaInicioReal
+        this.salida = horaFin
+        this.salida_real = horaFinReal
         this.estado = estado
     }
 
@@ -38,11 +42,13 @@ class LugarTrabajo {
         horaFin: String,
         estado: String
     ) {
-        this.id = id
+        this.uid = id
         this.nombre = nombre
         this.lugar = lugar
-        this.horaInicio = horaInicio
-        this.horaFin = horaFin
+        this.entrada = horaInicio
+        this.salida = horaFin
         this.estado = estado
     }
+
+    constructor()
 }
