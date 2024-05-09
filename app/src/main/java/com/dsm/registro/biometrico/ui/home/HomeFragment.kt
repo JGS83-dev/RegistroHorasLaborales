@@ -8,8 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -20,12 +22,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dsm.registro.biometrico.R
 import com.dsm.registro.biometrico.clases.LugarTrabajo
 import com.dsm.registro.biometrico.clases.adapters.LugarTrabajoAdapter
+import com.dsm.registro.biometrico.clases.adapters.LugarTrabajoRecientesAdapter
 import com.dsm.registro.biometrico.databinding.FragmentHomeBinding
+import com.dsm.registro.biometrico.utils.Utils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -38,6 +44,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     lateinit var firebaseAuth: FirebaseAuth
     var uid = ""
 
+    var BtnIniciarSesion: Button? = null
+    var BtnCrearCuenta: Button? = null
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,12 +67,67 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             ActivityCompat.requestPermissions(requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
 
+        BtnIniciarSesion = binding.btnSesion
+        BtnCrearCuenta = binding.btnCrearCuenta
+
         database = Firebase.database.reference
         var lugares = ArrayList<LugarTrabajo>()
+        var recientes = ArrayList<LugarTrabajo>()
         uid = firebaseAuth!!.currentUser?.uid.toString()
-        val infoLugar = LugarTrabajo()
+
+
+        if(firebaseAuth!!.currentUser != null){
+            BtnIniciarSesion!!.visibility = View.VISIBLE
+            BtnCrearCuenta!!.visibility = View.VISIBLE
+        }
+
+        //Actividades para hoy
         database.child("Direcciones").child(uid).get().addOnSuccessListener {
             it.children.forEach{
+
+                val df = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                val lugarDate = LocalDate.parse(it.child("dia").value.toString(), df)
+                val nowDate = LocalDate.parse(Utils.getNowDate(), df)
+
+                if(nowDate.equals(lugarDate)){
+                    val infoLugar = LugarTrabajo()
+                    infoLugar.dia = it.child("dia").value.toString()
+                    infoLugar.nombre = it.child("nombre").value.toString()
+                    infoLugar.latitud = it.child("latitud").value.toString()
+                    infoLugar.longitud = it.child("longitud").value.toString()
+                    infoLugar.imagen = it.child("imagen").value.toString()
+                    infoLugar.estado = it.child("estado").value.toString()
+
+                    infoLugar.entrada = it.child("entrada").value.toString()
+                    infoLugar.salida = it.child("salida").value.toString()
+                    infoLugar.entrada_real = it.child("entrada_real").value.toString()
+                    infoLugar.salida_real = it.child("salida_real").value.toString()
+
+                    infoLugar.lugar = "${it.child("latitud").value.toString()} , ${it.child("longitud").value.toString()}"
+
+                    infoLugar.uid = it.key.toString()
+
+                    lugares.add(infoLugar)
+                }
+            }
+            val recyclerViewLugares: RecyclerView = binding.recyclerHoy
+            recyclerViewLugares.layoutManager = LinearLayoutManager(context)
+
+            val lugaresAdapter = LugarTrabajoAdapter(requireContext(),lugares,object : LugarTrabajoAdapter.LugarTrabajoListener {
+                override fun onItemClick(lugar: LugarTrabajo) {
+                    navegarAInformacionLugar(lugar)
+                }
+            })
+
+            recyclerViewLugares.adapter = lugaresAdapter
+        }.addOnFailureListener{
+            Log.e("firebase", "Error getting data", it)
+        }
+
+        //Actividades Recientes
+        database.child("Direcciones").child(uid).get().addOnSuccessListener {
+            it.children.forEach{
+                val infoLugar = LugarTrabajo()
                 infoLugar.dia = it.child("dia").value.toString()
                 infoLugar.nombre = it.child("nombre").value.toString()
                 infoLugar.latitud = it.child("latitud").value.toString()
@@ -79,19 +144,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                 infoLugar.uid = it.key.toString()
 
-                lugares.add(infoLugar)
+                recientes.add(infoLugar)
             }
+            val recyclerViewLugaresRecientes: RecyclerView = binding.recyclerRecientes
+            recyclerViewLugaresRecientes.layoutManager = LinearLayoutManager(context)
 
-            val recyclerViewLugares: RecyclerView = binding.recyclerHoy
-            recyclerViewLugares.layoutManager = LinearLayoutManager(context)
-
-            val lugaresAdapter = LugarTrabajoAdapter(requireContext(),lugares,object : LugarTrabajoAdapter.LugarTrabajoListener {
+            val lugaresAdapterRecientes = LugarTrabajoRecientesAdapter(requireContext(),recientes,object : LugarTrabajoRecientesAdapter.LugarTrabajoListener {
                 override fun onItemClick(lugar: LugarTrabajo) {
                     navegarAInformacionLugar(lugar)
                 }
             })
 
-            recyclerViewLugares.adapter = lugaresAdapter
+            recyclerViewLugaresRecientes.adapter = lugaresAdapterRecientes
         }.addOnFailureListener{
             Log.e("firebase", "Error getting data", it)
         }

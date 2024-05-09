@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    style="@style/EstiloContenedorPrincipal"
     android:layout_height="match_parent">
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewRecientes"
@@ -17,6 +18,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
                 style="@style/EstiloContenedorPrincipal"
                 android:orientation="vertical">
 
@@ -49,7 +51,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:layout_weight="1"/>
+                        android:layout_weight="3"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -73,7 +75,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:layout_weight="1"/>
+                        android:layout_weight="3"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -97,7 +99,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:layout_weight="1"/>
+                        android:layout_weight="3"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -121,7 +123,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:layout_weight="1"/>
+                        android:layout_weight="3"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -144,7 +146,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:layout_weight="1"/>
+                        android:layout_weight="3"/>
                 </LinearLayout>
 
                 <TextView

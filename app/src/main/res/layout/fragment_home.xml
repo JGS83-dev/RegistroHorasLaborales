@@ -24,11 +24,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerHoy"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="200dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="3"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
                 android:scrollbars="vertical" />
 
             <TextView
@@ -41,7 +39,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerRecientes"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="200dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="3"
                 android:scrollbars="vertical" />
@@ -53,13 +51,14 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/btnCerrarSesion"
+                    android:id="@+id/btnSesion"
                     style="@style/EstiloBotones"
                     android:text="@string/Btn_Logeo"
                     android:layout_margin="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:visibility="invisible"
                     android:layout_weight="3"/>
 
                 <Button
@@ -70,6 +69,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:visibility="invisible"
                     android:layout_weight="3"/>
             </LinearLayout>
 
