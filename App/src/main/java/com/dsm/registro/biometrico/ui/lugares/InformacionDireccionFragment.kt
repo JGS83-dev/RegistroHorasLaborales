@@ -111,6 +111,7 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
         ) {
             override fun handleOnBackPressed() {
                 findNavController().navigate(R.id.navigation_home)
+                database.child("InformacionLugar").removeValue()
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(
