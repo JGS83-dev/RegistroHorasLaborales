@@ -12,7 +12,14 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
@@ -27,14 +34,20 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.FaceDetectorOptions
 import com.squareup.picasso.Picasso
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_direccion) {
 
     companion object {
         fun newInstance() = InformacionDireccionFragment()
+        private const val TAG = "CameraXApp"
+        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
     }
 
     private lateinit var viewModel: InformacionDireccionViewModel
@@ -54,6 +67,15 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
     var txtUbicacion: TextView? = null
 
     val infoLugar = LugarTrabajo()
+
+    var fotoTomada: InputImage? = null
+    var fotoGuardada: InputImage? = null
+    var urlFotoGuardada = ""
+
+    private var imageCapture: ImageCapture? = null
+
+    private lateinit var cameraExecutor: ExecutorService
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -108,8 +130,10 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
             if(lugarDate.isEqual(nowDate)){
                 if(infoLugar.estado =="pendiente"){
                     BtnTomarBiometrico!!.visibility = View.VISIBLE
+                    binding.viewFinder.visibility = View.VISIBLE
                     BtnTomarBiometrico!!.setOnClickListener {
                         Toast.makeText(context, "Seleccione o tome una foto de acuerdo a la subida de referencia en su perfil", Toast.LENGTH_LONG).show()
+                        startCamera()
                     }
                 }
             }
@@ -117,6 +141,14 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
         }.addOnFailureListener{
             Log.e("firebase", "Error getting user data", it)
         }
+
+        database.child("Usuarios").child(firebaseAuth!!.currentUser?.uid.toString()).get().addOnSuccessListener {
+            urlFotoGuardada = it.child("biometria").value.toString()
+        }.addOnFailureListener{
+            Log.e("firebase", "Error getting user data", it)
+        }
+
+        cameraExecutor = Executors.newSingleThreadExecutor()
         return root
     }
 
@@ -124,6 +156,38 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(InformacionDireccionViewModel::class.java)
         // TODO: Use the ViewModel
+    }
+
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+
+        cameraProviderFuture.addListener({
+            // Used to bind the lifecycle of cameras to the lifecycle owner
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+
+            // Preview
+            val preview = Preview.Builder()
+                .build()
+                .also {
+                    it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+                }
+
+            // Select back camera as a default
+            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+
+            try {
+                // Unbind use cases before rebinding
+                cameraProvider.unbindAll()
+
+                // Bind use cases to camera
+                cameraProvider.bindToLifecycle(
+                    this, cameraSelector, preview)
+
+            } catch(exc: Exception) {
+                Log.e("Camera", "Use case binding failed", exc)
+            }
+
+        }, ContextCompat.getMainExecutor(requireContext()))
     }
 
     override fun onAttach(context: Context) {
@@ -140,6 +204,17 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
             this, // LifecycleOwner
             callback
         )
+    }
+
+    val highAccuracyOpts = FaceDetectorOptions.Builder()
+        .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
+        .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
+        .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
+        .build()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
     }
 
 }

@@ -19,6 +19,16 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"/>
 
+            <androidx.camera.view.PreviewView
+                android:id="@+id/viewFinder"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:visibility="invisible"/>
+
             <ImageView
                 android:id="@+id/imagenReferencia"
                 android:layout_width="150dp"
