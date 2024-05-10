@@ -78,7 +78,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         if(firebaseAuth!!.currentUser == null){
             BtnIniciarSesion!!.visibility = View.VISIBLE
+
+            BtnIniciarSesion!!.setOnClickListener{
+                findNavController().navigate(R.id.navigation_notifications)
+            }
             BtnCrearCuenta!!.visibility = View.VISIBLE
+
+            BtnCrearCuenta!!.setOnClickListener{
+                findNavController().navigate(R.id.navigation_registrarse)
+            }
         }
 
         //Actividades para hoy
