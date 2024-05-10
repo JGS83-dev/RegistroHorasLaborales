@@ -58,6 +58,7 @@
 
     <string name="titulo_informacion_lugar">Información lugar de trabajo</string>
     <string name="btn_tomar_biometria">Tomar Datos Biometricos</string>
+    <string name="btn_tomar_foto">Tomar Foto</string>
     <string name="sub_titulo_informacion_lugar">Información</string>
 
     <!--Inicio-->
