@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
@@ -44,6 +46,12 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
     var storage: FirebaseStorage? = null
 
     var BtnTomarBiometrico: Button? = null
+    var txtHoraFinReal: TextView? = null
+    var txtHoraFin: TextView? = null
+    var txtHoraInicioReal: TextView? = null
+    var txtHoraInicio: TextView? = null
+    var txtNombreLugar: TextView? = null
+    var txtUbicacion: TextView? = null
 
     val infoLugar = LugarTrabajo()
     @RequiresApi(Build.VERSION_CODES.O)
@@ -76,6 +84,20 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
             infoLugar.uid = it.key.toString()
 
             BtnTomarBiometrico = binding.btnTomarBiometria
+
+            txtHoraFinReal = binding.txtHoraFinReal
+            txtHoraFin = binding.txtHoraFin
+            txtHoraInicioReal = binding.txtHoraEntradaReal
+            txtHoraInicio = binding.txtHoraEntrada
+            txtNombreLugar = binding.txtNombreLugar
+            txtUbicacion = binding.txtUbicacion
+
+            txtHoraFinReal!!.text = infoLugar.salida_real
+            txtHoraFin!!.text = infoLugar.salida
+            txtHoraInicioReal!!.text = infoLugar.entrada_real
+            txtHoraInicio!!.text = infoLugar.entrada
+            txtNombreLugar!!.text = infoLugar.nombre
+            txtUbicacion!!.text = infoLugar.lugar
 
             Picasso.get().load(infoLugar.imagen).into(binding.imagenReferencia);
 

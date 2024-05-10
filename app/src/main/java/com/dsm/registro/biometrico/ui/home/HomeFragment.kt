@@ -76,7 +76,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         uid = firebaseAuth!!.currentUser?.uid.toString()
 
 
-        if(firebaseAuth!!.currentUser != null){
+        if(firebaseAuth!!.currentUser == null){
             BtnIniciarSesion!!.visibility = View.VISIBLE
             BtnCrearCuenta!!.visibility = View.VISIBLE
         }
