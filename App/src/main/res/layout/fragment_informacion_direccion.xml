@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     style="@style/EstiloContenedorPrincipal"
     tools:context=".ui.lugares.InformacionDireccionFragment">
     <ScrollView
@@ -182,6 +182,30 @@
 
                 <TextView
                     android:id="@+id/txtUbicacion"
+                    android:text=""
+                    style="@style/EstiloContenido"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_weight="3"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:text="@string/lbl_estado"
+                    style="@style/EstiloLabels"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="3"/>
+
+                <TextView
+                    android:id="@+id/txtEstado"
                     android:text=""
                     style="@style/EstiloContenido"
                     android:layout_width="match_parent"

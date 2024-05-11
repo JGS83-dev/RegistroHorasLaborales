@@ -87,6 +87,7 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
     var txtHoraInicio: TextView? = null
     var txtNombreLugar: TextView? = null
     var txtUbicacion: TextView? = null
+    var txtEstado: TextView? = null
 
     val infoLugar = LugarTrabajo()
     var urlFotoGuardada = ""
@@ -137,6 +138,7 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
             txtHoraInicio = binding.txtHoraEntrada
             txtNombreLugar = binding.txtNombreLugar
             txtUbicacion = binding.txtUbicacion
+            txtEstado = binding.txtEstado
 
             txtHoraFinReal!!.text = infoLugar.salida_real
             txtHoraFin!!.text = infoLugar.salida
@@ -144,6 +146,7 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
             txtHoraInicio!!.text = infoLugar.entrada
             txtNombreLugar!!.text = infoLugar.nombre
             txtUbicacion!!.text = infoLugar.lugar
+            txtEstado!!.text = infoLugar.estado
 
             Picasso.get().load(infoLugar.imagen).into(binding.imagenReferencia);
 
