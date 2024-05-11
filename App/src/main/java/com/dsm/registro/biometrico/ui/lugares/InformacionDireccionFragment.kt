@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.os.Debug
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -126,7 +127,7 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
 
             infoLugar.lugar = "${it.child("latitud").value.toString()} , ${it.child("longitud").value.toString()}"
 
-            infoLugar.uid = it.key.toString()
+            infoLugar.uid = it.child("uid").value.toString()
 
             BtnTomarBiometrico = binding.btnTomarBiometria
 
@@ -282,6 +283,8 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
         Log.i("Distancia calculada",distancia.toString())
         Log.i("Operacion",(distancia.compareTo(5)).toString())
 
+        Log.i("Info ID",infoLugar.uid)
+
         if(distancia.compareTo(5) <= 0){
             if(infoLugar.estado == "pendiente"){
                 infoLugar.estado = "proceso"
@@ -290,8 +293,9 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
             }
 
             Log.i("Actualizando","Estado del lugar de trabajo")
+            var userUID = firebaseAuth!!.currentUser?.uid.toString()
             val databaseReference = FirebaseDatabase.getInstance().getReference("Direcciones")
-            databaseReference.child(firebaseAuth!!.currentUser?.uid.toString())
+            databaseReference.child(userUID!!)
                 .child(infoLugar.uid)
                 .setValue(infoLugar)
                 .addOnSuccessListener {
