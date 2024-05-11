@@ -71,7 +71,6 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
     var datePicker: DatePickerDialog? = null
     val Datos = HashMap<String, String?>()
 
-    private lateinit var database: DatabaseReference
     private val binding get() = _binding!!
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 

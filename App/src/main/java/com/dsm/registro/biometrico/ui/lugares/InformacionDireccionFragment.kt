@@ -3,6 +3,8 @@ package com.dsm.registro.biometrico.ui.lugares
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -24,6 +26,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.core.impl.utils.ContextUtil.getApplicationContext
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -34,6 +37,8 @@ import com.dsm.registro.biometrico.clases.LugarTrabajo
 import com.dsm.registro.biometrico.databinding.FragmentInformacionDireccionBinding
 import com.dsm.registro.biometrico.utils.Utils
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -55,6 +60,12 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
         fun newInstance() = InformacionDireccionFragment()
         private const val TAG = "CameraXApp"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+        private const val REQUEST_CODE_PERMISSIONS = 10
+        private val REQUIRED_PERMISSIONS =
+            mutableListOf (
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ).toTypedArray()
     }
 
     private lateinit var viewModel: InformacionDireccionViewModel
@@ -63,7 +74,6 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
     private val binding get() = _binding!!
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var firebaseAuth: FirebaseAuth? = null
-    var storage: FirebaseStorage? = null
 
     var BtnTomarBiometrico: Button? = null
     var BtnTomarFoto: Button? = null
@@ -75,12 +85,12 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
     var txtUbicacion: TextView? = null
 
     val infoLugar = LugarTrabajo()
-
-    var fotoTomada: InputImage? = null
-    var fotoGuardada: InputImage? = null
     var urlFotoGuardada = ""
 
     var tomandoFoto:Boolean = false
+
+    var ubicacionActual:Location? = null
+    var ubicacionGuardada:Location? = null
 
     private var imageCapture: ImageCapture? = null
 
@@ -138,7 +148,7 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
             val nowDate = LocalDate.parse(Utils.getNowDate(), df)
 
             if(lugarDate.isEqual(nowDate)){
-                if(infoLugar.estado =="pendiente"){
+                if(infoLugar.estado =="pendiente" || infoLugar.estado =="proceso"){
                     BtnTomarBiometrico!!.visibility = View.VISIBLE
                     binding.viewFinder.visibility = View.VISIBLE
                     BtnTomarBiometrico!!.setOnClickListener {
@@ -254,9 +264,80 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
                     tomandoFoto = false
                     cameraExecutor.shutdown()
                     binding.viewFinder.removeAllViews()
+                    ObtenerUbicacionActual()
                 }
             }
         )
+    }
+
+    private fun ValidarEntradaSalida(){
+        ubicacionGuardada = Location("guardada")
+        ubicacionGuardada!!.latitude = infoLugar.latitud.toDouble()
+        ubicacionGuardada!!.longitude = infoLugar.latitud.toDouble()
+
+        var distancia = ubicacionActual!!.distanceTo(ubicacionGuardada!!)
+        Log.i("Distancia calculada",distancia.toString())
+        if(distancia < 6){
+            if(infoLugar.estado == "pendiente"){
+                infoLugar.estado == "proceso"
+            }else if(infoLugar.estado == "proceso"){
+                infoLugar.estado == "finalizado"
+            }
+        }
+    }
+
+    private fun ObtenerUbicacionActual(){
+        if (allPermissionsGranted()) {
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+            val cancellationTokenSource = CancellationTokenSource()
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                fusedLocationClient.getCurrentLocation(100, cancellationTokenSource.token)
+                    .addOnSuccessListener { location ->
+                        Log.d("Location InformacionDireccionFragment", "Ubicacion actual ${location.altitude} , ${location.longitude}")
+
+                        Toast.makeText(context,
+                            "Ubicacion actual obtenida exitosamente",
+                            Toast.LENGTH_LONG).show()
+                        ubicacionActual = location
+                        ValidarEntradaSalida()
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("Location", "Oops location failed with exception: $exception")
+                    }
+            }
+        } else {
+            Log.d("Permissions", "Permisos no concedidos")
+            ActivityCompat.requestPermissions(requireActivity(),
+                REQUIRED_PERMISSIONS,
+                REQUEST_CODE_PERMISSIONS
+            )
+        }
+    }
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
+    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults:
+        IntArray) {
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (allPermissionsGranted()) {
+                Toast.makeText(context,
+                    "Permisos concedidos por el usuario.",
+                    Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context,
+                    "Permisos denegados por el usuario.",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -274,12 +355,6 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
             callback
         )
     }
-
-    val highAccuracyOpts = FaceDetectorOptions.Builder()
-        .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
-        .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
-        .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
-        .build()
 
     override fun onDestroy() {
         super.onDestroy()
