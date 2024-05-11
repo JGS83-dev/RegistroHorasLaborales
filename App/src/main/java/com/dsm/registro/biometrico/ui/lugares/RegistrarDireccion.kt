@@ -168,8 +168,8 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
                 ) {
                     fusedLocationClient.getCurrentLocation(100, cancellationTokenSource.token)
                         .addOnSuccessListener { location ->
-                            Log.d("Location", "Ubicacion actual ${location.altitude} , ${location.longitude}")
-                            Datos["latitud"] = location.altitude.toString()
+                            Log.d("Location", "Ubicacion actual ${location.latitude} , ${location.longitude}")
+                            Datos["latitud"] = location.latitude.toString()
                             Datos["longitud"] = location.longitude.toString()
                             Toast.makeText(context,
                                 "Ubicacion actual obtenida exitosamente",

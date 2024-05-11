@@ -54,6 +54,8 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_direccion) {
 
@@ -274,17 +276,20 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
     private fun ValidarEntradaSalida(){
         ubicacionGuardada = Location("guardada")
         ubicacionGuardada!!.latitude = infoLugar.latitud.toDouble()
-        ubicacionGuardada!!.longitude = infoLugar.latitud.toDouble()
+        ubicacionGuardada!!.longitude = infoLugar.longitud.toDouble()
 
-        var distancia = ubicacionActual!!.distanceTo(ubicacionGuardada!!)
+        var distancia = ubicacionActual!!.distanceTo(ubicacionGuardada!!).roundToInt()
         Log.i("Distancia calculada",distancia.toString())
-        if(distancia < 6){
+        Log.i("Operacion",(distancia.compareTo(5)).toString())
+
+        if(distancia.compareTo(5) <= 0){
             if(infoLugar.estado == "pendiente"){
-                infoLugar.estado == "proceso"
+                infoLugar.estado = "proceso"
             }else if(infoLugar.estado == "proceso"){
-                infoLugar.estado == "finalizado"
+                infoLugar.estado = "finalizado"
             }
 
+            Log.i("Actualizando","Estado del lugar de trabajo")
             val databaseReference = FirebaseDatabase.getInstance().getReference("Direcciones")
             databaseReference.child(firebaseAuth!!.currentUser?.uid.toString())
                 .child(infoLugar.uid)
@@ -292,6 +297,7 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
                 .addOnSuccessListener {
                     Toast.makeText(context, "Dirección de trabajo actualizada con éxito", Toast.LENGTH_SHORT)
                         .show()
+                    Log.i("Actualizado","Estado actualizado del lugar de trabajo")
                     findNavController().navigate(R.id.navigation_home)
                 }.addOnFailureListener { e ->
                     Toast.makeText(
@@ -299,6 +305,7 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
                         "Ocurrio un error al actualizar dirección de trabajo. " + e.message,
                         Toast.LENGTH_SHORT
                     ).show()
+                    Log.i("Error Actualizando","Estado del lugar de trabajo")
                 }
         }
     }
@@ -317,7 +324,7 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
             ) {
                 fusedLocationClient.getCurrentLocation(100, cancellationTokenSource.token)
                     .addOnSuccessListener { location ->
-                        Log.d("Location InformacionDireccionFragment", "Ubicacion actual ${location.altitude} , ${location.longitude}")
+                        Log.d("Location InformacionDireccionFragment", "Ubicacion actual ${location.latitude} , ${location.longitude}")
 
                         Toast.makeText(context,
                             "Ubicacion actual obtenida exitosamente",
