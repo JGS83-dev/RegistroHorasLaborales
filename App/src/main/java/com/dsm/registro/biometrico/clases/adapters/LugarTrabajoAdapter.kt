@@ -18,6 +18,7 @@ class LugarTrabajoAdapter (private val context:Context, private val dataSet: Lis
         val txtHoraInicio: TextView
         val txtHoraFin: TextView
         val txtMasInfo: TextView
+        val txtEstado: TextView
 
         init {
             txtNombre = view.findViewById(R.id.txtNombre)
@@ -25,6 +26,7 @@ class LugarTrabajoAdapter (private val context:Context, private val dataSet: Lis
             txtHoraInicio = view.findViewById(R.id.txtHoraInicio)
             txtHoraFin = view.findViewById(R.id.txtHoraFin)
             txtMasInfo = view.findViewById(R.id.txtMasInfo)
+            txtEstado = view.findViewById(R.id.txtEstado)
         }
     }
 
@@ -38,6 +40,7 @@ class LugarTrabajoAdapter (private val context:Context, private val dataSet: Lis
         holder.txtLugar.setText(lugarTrabajo.lugar)
         holder.txtHoraInicio.setText(lugarTrabajo.entrada)
         holder.txtHoraFin.setText(lugarTrabajo.salida)
+        holder.txtEstado.setText(lugarTrabajo.estado)
 
         holder.txtMasInfo.setOnClickListener{
             listener.onItemClick(dataSet.get(position))

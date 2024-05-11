@@ -20,6 +20,7 @@ class LugarTrabajoRecientesAdapter (private val context:Context, private val dat
         val txtHoraFin: TextView
         val txtHoraFinReal: TextView
         val txtMasInfo: TextView
+        val txtEstado: TextView
 
         init {
             txtNombre = view.findViewById(R.id.txtNombre)
@@ -29,6 +30,7 @@ class LugarTrabajoRecientesAdapter (private val context:Context, private val dat
             txtHoraFin = view.findViewById(R.id.txtHoraFin)
             txtHoraFinReal = view.findViewById(R.id.txtHoraFinReal)
             txtMasInfo = view.findViewById(R.id.txtMasInfo)
+            txtEstado = view.findViewById(R.id.txtEstado)
         }
     }
 
@@ -44,6 +46,7 @@ class LugarTrabajoRecientesAdapter (private val context:Context, private val dat
         holder.txtHoraInicioReal.text = lugarTrabajo.entrada_real
         holder.txtHoraFin.text = lugarTrabajo.salida
         holder.txtHoraFinReal.text = lugarTrabajo.salida_real
+        holder.txtEstado.text = lugarTrabajo.estado
 
         holder.txtMasInfo.setOnClickListener{
             listener.onItemClick(dataSet.get(position))

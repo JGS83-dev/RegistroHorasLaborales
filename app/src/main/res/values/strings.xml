@@ -68,6 +68,7 @@
     <string name="btn_mas_info">Más info</string>
     <string name="lbl_nombre">Nombre:</string>
     <string name="lbl_lugar">Lugar:</string>
+    <string name="lbl_estado">Estado:</string>
     <string name="lbl_ubicacion">Ubicación:</string>
     <string name="lbl_hora_inicio">Hora Inicio:</string>
     <string name="lbl_hora_inicio_real">Hora Inicio Real:</string>

@@ -41,6 +41,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -283,6 +284,22 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
             }else if(infoLugar.estado == "proceso"){
                 infoLugar.estado == "finalizado"
             }
+
+            val databaseReference = FirebaseDatabase.getInstance().getReference("Direcciones")
+            databaseReference.child(firebaseAuth!!.currentUser?.uid.toString())
+                .child(infoLugar.uid)
+                .setValue(infoLugar)
+                .addOnSuccessListener {
+                    Toast.makeText(context, "Dirección de trabajo actualizada con éxito", Toast.LENGTH_SHORT)
+                        .show()
+                    findNavController().navigate(R.id.navigation_home)
+                }.addOnFailureListener { e ->
+                    Toast.makeText(
+                        context,
+                        "Ocurrio un error al actualizar dirección de trabajo. " + e.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
         }
     }
 
