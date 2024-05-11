@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Debug
@@ -47,8 +48,12 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.FaceContour
+import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
+import com.google.mlkit.vision.face.FaceLandmark
 import com.squareup.picasso.Picasso
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -96,10 +101,19 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
 
     var ubicacionActual:Location? = null
     var ubicacionGuardada:Location? = null
+    var uriFoto:Uri? = null
 
     private var imageCapture: ImageCapture? = null
 
     private lateinit var cameraExecutor: ExecutorService
+
+    val highAccuracyOpts = FaceDetectorOptions.Builder()
+        .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
+        .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
+        .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
+        .build()
+
+    val detector = FaceDetection.getClient(highAccuracyOpts)
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -266,6 +280,7 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
                 override fun
                         onImageSaved(output: ImageCapture.OutputFileResults){
                     val msg = "Foto tomada con exito: ${output.savedUri}"
+                    uriFoto = output.savedUri
                     Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
                     tomandoFoto = false
@@ -289,31 +304,90 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
         Log.i("Info ID",infoLugar.uid)
 
         if(distancia.compareTo(5) <= 0){
-            if(infoLugar.estado == "pendiente"){
-                infoLugar.estado = "proceso"
-            }else if(infoLugar.estado == "proceso"){
-                infoLugar.estado = "finalizado"
-            }
+            val image: InputImage
+            var conteoCaras = 0
+            try {
+                image = InputImage.fromFilePath(requireContext(), uriFoto!!)
+                val result = detector.process(image)
+                    .addOnSuccessListener { faces ->
+                        if(faces.isEmpty()){
+                            Toast.makeText(
+                                context,
+                                "No se detecto ningun rostro",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }else{
+                            for (face in faces) {
+                                conteoCaras += 1
 
-            Log.i("Actualizando","Estado del lugar de trabajo")
-            var userUID = firebaseAuth!!.currentUser?.uid.toString()
-            val databaseReference = FirebaseDatabase.getInstance().getReference("Direcciones")
-            databaseReference.child(userUID!!)
-                .child(infoLugar.uid)
-                .setValue(infoLugar)
-                .addOnSuccessListener {
-                    Toast.makeText(context, "Dirección de trabajo actualizada con éxito", Toast.LENGTH_SHORT)
-                        .show()
-                    Log.i("Actualizado","Estado actualizado del lugar de trabajo")
-                    findNavController().navigate(R.id.navigation_home)
-                }.addOnFailureListener { e ->
-                    Toast.makeText(
-                        context,
-                        "Ocurrio un error al actualizar dirección de trabajo. " + e.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Log.i("Error Actualizando","Estado del lugar de trabajo")
-                }
+                                val bounds = face.boundingBox
+                                val rotY = face.headEulerAngleY // Head is rotated to the right rotY degrees
+                                val rotZ = face.headEulerAngleZ // Head is tilted sideways rotZ degrees
+
+                                // If landmark detection was enabled (mouth, ears, eyes, cheeks, and
+                                // nose available):
+                                val leftEar = face.getLandmark(FaceLandmark.LEFT_EAR)
+                                leftEar?.let {
+                                    val leftEarPos = leftEar.position
+                                    Log.i("Objeto Face","leftEarPos -> $leftEarPos")
+                                }
+
+                                // If contour detection was enabled:
+                                val leftEyeContour = face.getContour(FaceContour.LEFT_EYE)?.points
+                                val upperLipBottomContour = face.getContour(FaceContour.UPPER_LIP_BOTTOM)?.points
+
+                                // If classification was enabled:
+                                if (face.smilingProbability != null) {
+                                    val smileProb = face.smilingProbability
+                                }
+                                if (face.rightEyeOpenProbability != null) {
+                                    val rightEyeOpenProb = face.rightEyeOpenProbability
+                                }
+
+                                // If face tracking was enabled:
+                                if (face.trackingId != null) {
+                                    val id = face.trackingId
+                                }
+                                Log.i("Objeto Face","bounds -> $bounds")
+                                Log.i("Objeto Face","rotY -> $rotY")
+                                Log.i("Objeto Face","rotZ -> $rotZ")
+                                Log.i("Info Caras","Total caras detectado $conteoCaras")
+
+                                if(infoLugar.estado == "pendiente"){
+                                    infoLugar.estado = "proceso"
+                                }else if(infoLugar.estado == "proceso"){
+                                    infoLugar.estado = "finalizado"
+                                }
+
+                                Log.i("Actualizando","Estado del lugar de trabajo")
+                                var userUID = firebaseAuth!!.currentUser?.uid.toString()
+                                val databaseReference = FirebaseDatabase.getInstance().getReference("Direcciones")
+                                databaseReference.child(userUID!!)
+                                    .child(infoLugar.uid)
+                                    .setValue(infoLugar)
+                                    .addOnSuccessListener {
+                                        Toast.makeText(context, "Dirección de trabajo actualizada con éxito", Toast.LENGTH_SHORT)
+                                            .show()
+                                        Log.i("Actualizado","Estado actualizado del lugar de trabajo")
+                                        findNavController().navigate(R.id.navigation_home)
+                                    }.addOnFailureListener { e ->
+                                        Toast.makeText(
+                                            context,
+                                            "Ocurrio un error al actualizar dirección de trabajo. " + e.message,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        Log.i("Error Actualizando","Estado del lugar de trabajo")
+                                    }
+                            }
+                        }
+
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("Face Detection",e.message.toString())
+                    }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
         }
     }
 
