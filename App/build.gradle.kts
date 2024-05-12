@@ -76,4 +76,8 @@ dependencies {
     implementation("com.google.firebase:firebase-database:20.3.1")
     implementation ("com.airbnb.android:lottie:3.0.1")
     implementation ("com.squareup.picasso:picasso:2.8")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 }

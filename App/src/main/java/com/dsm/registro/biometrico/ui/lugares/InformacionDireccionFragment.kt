@@ -1,6 +1,5 @@
 package com.dsm.registro.biometrico.ui.lugares
 
-import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
@@ -8,35 +7,31 @@ import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Debug
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
-import androidx.camera.core.impl.utils.ContextUtil.getApplicationContext
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.dsm.registro.biometrico.R
+import com.dsm.registro.biometrico.clases.DataPost
 import com.dsm.registro.biometrico.clases.LugarTrabajo
 import com.dsm.registro.biometrico.databinding.FragmentInformacionDireccionBinding
+import com.dsm.registro.biometrico.service.MailerApiService
 import com.dsm.registro.biometrico.utils.Utils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -46,13 +41,18 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.FaceContour
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 import com.google.mlkit.vision.face.FaceLandmark
 import com.squareup.picasso.Picasso
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -61,8 +61,8 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import kotlin.math.abs
 import kotlin.math.roundToInt
+
 
 class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_direccion) {
 
@@ -76,6 +76,8 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
                 android.Manifest.permission.ACCESS_COARSE_LOCATION,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ).toTypedArray()
+        private const val BASE_URL =
+            "https://us-west1-registrohoraslaborales.cloudfunctions.net/api-mailer/api/"
     }
 
     private lateinit var viewModel: InformacionDireccionViewModel
@@ -86,7 +88,6 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
     var firebaseAuth: FirebaseAuth? = null
 
     var BtnTomarBiometrico: Button? = null
-    var BtnTomarFoto: Button? = null
     var txtHoraFinReal: TextView? = null
     var txtHoraFin: TextView? = null
     var txtHoraInicioReal: TextView? = null
@@ -365,6 +366,32 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
                             }else if(infoLugar.estado == "proceso"){
                                 infoLugar.estado = "finalizado"
                                 infoLugar.salida_real = String.format("%02d:%02d", hour, minutes)
+
+                                var retrofit = Retrofit.Builder()
+                                    .baseUrl(BASE_URL)
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build()
+
+                                var retrofitAPI: MailerApiService = retrofit.create(MailerApiService::class.java)
+                                val dataPost = DataPost()
+                                dataPost.sendto = firebaseAuth!!.currentUser!!.email!!
+                                dataPost.subject = "Notificación de salida de lugar"
+                                dataPost.id = infoLugar.uid
+                                dataPost.horaEntrada = infoLugar.entrada
+                                dataPost.horaEntradaReal = infoLugar.entrada_real
+                                dataPost.horaSalida = infoLugar.salida
+                                dataPost.horaSalidaReal = infoLugar.salida_real
+
+                                retrofitAPI.callMailer(dataPost).enqueue(object : Callback<ResponseBody> {
+                                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                                        Log.i("Call Mailer","Correo enviado")
+                                    }
+
+                                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                                        Log.i("Call Mailer","Error al enviar correo")
+                                    }
+                                })
+
                             }
 
                             Log.i("Actualizando","Estado del lugar de trabajo")
