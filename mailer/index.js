@@ -3,8 +3,7 @@ import cors from 'cors';
 import MailerRouter from './src/router/MailerRouter.js';
 
 const port = 8888
-const app = express()
-
+export const app = express();
 app.use(cors());
 app.use(express.json());
 

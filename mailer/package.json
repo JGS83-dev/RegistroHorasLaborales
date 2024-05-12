@@ -2,7 +2,6 @@
   "name": "nodemailer",
   "version": "0.0.1",
   "description": "Proyecto para envio email",
-  "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "nodemon index.js",
