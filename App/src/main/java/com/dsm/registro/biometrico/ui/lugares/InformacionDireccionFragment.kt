@@ -388,6 +388,12 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
             } catch (e: IOException) {
                 e.printStackTrace()
             }
+        }else{
+            Toast.makeText(
+                context,
+                "Se encuentra demasiado lejos del punto de marcado, la distancia maxima es 5 metros",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 

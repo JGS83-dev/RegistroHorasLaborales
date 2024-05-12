@@ -63,7 +63,7 @@
                 android:layout_marginTop="10dp"
                 android:id="@+id/recyclerLugares"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="400dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="3"
                 android:scrollbars="vertical" />
