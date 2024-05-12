@@ -3,12 +3,16 @@
   "version": "0.0.1",
   "description": "Proyecto para envio email",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "deploy": "gcloud functions deploy api-mailer --region=us-west1 --runtime=nodejs20 --allow-unauthenticated --memory=256MB --max-instances=1 --min-instances=0 --trigger-http --entry-point=app"
   },
   "author": "BirdKron",
   "license": "Apache-2.0 license",
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.18.1",
     "nodemailer": "^6.7.7",
     "nodemon": "^2.0.19"

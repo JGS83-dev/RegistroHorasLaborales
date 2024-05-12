@@ -1,11 +1,10 @@
-const nodemailer = require('nodemailer')
+import nodemailer from 'nodemailer'
 
-let emailEnv, passEnv;
+export const sendemail = async (sendto, subject, htmlbody) => {
+    let emailEnv, passEnv;
 
-emailEnv = '';
-passEnv = '';
-
-async function sendemail(sendto, subject, htmlbody) {
+    emailEnv = process.env.EMAIL;
+    passEnv = process.env.PASSWORD;
 
     //Configuracion para envio con Office 365
     //mas info: https://nodemailer.com/smtp/
@@ -31,7 +30,7 @@ async function sendemail(sendto, subject, htmlbody) {
     };
 
     //Envio del correo configurado
-    transporter.sendMail(configMail, (err, info) => {
+    await transporter.sendMail(configMail, (err, info) => {
         if (err) {
             console.error(err.message)
         }
@@ -39,8 +38,4 @@ async function sendemail(sendto, subject, htmlbody) {
         return 'Correo enviado con éxito';
     })
 
-};
-
-module.exports = {
-    sendemail,
 };
