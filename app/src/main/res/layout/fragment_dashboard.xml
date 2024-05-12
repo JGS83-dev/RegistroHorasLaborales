@@ -48,15 +48,15 @@
                     android:layout_margin="10dp"
                     android:layout_weight="3"/>
 
-                <Button
-                    android:id="@+id/btnBuscar"
-                    android:text="@string/btn_buscar"
-                    style="@style/EstiloBotones"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:layout_weight="3"/>
+<!--                <Button-->
+<!--                    android:id="@+id/btnBuscar"-->
+<!--                    android:text="@string/btn_buscar"-->
+<!--                    style="@style/EstiloBotones"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_margin="10dp"-->
+<!--                    android:layout_weight="3"/>-->
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView

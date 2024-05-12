@@ -30,7 +30,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     // onDestroyView.
     private val binding get() = _binding!!
     var BtnAgregar: Button? = null
-    var BtnBuscar: Button? = null
+//    var BtnBuscar: Button? = null
     var firebaseAuth: FirebaseAuth? = null
     lateinit var database: DatabaseReference
     var uid = ""
@@ -47,7 +47,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         val root: View = binding.root
 
         BtnAgregar = binding.btnAgregar
-        BtnBuscar = binding.btnBuscar
+//        BtnBuscar = binding.btnBuscar
         database = Firebase.database.reference
         firebaseAuth = FirebaseAuth.getInstance()
 

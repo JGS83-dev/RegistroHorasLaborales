@@ -57,6 +57,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -301,6 +302,10 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
         Log.i("Distancia calculada",distancia.toString())
         Log.i("Operacion",(distancia.compareTo(5)).toString())
 
+        val calendar = Calendar.getInstance()
+        val hour: Int = calendar.get(Calendar.HOUR_OF_DAY)
+        val minutes: Int = calendar.get(Calendar.MINUTE)
+
         Log.i("Info ID",infoLugar.uid)
 
         if(distancia.compareTo(5) <= 0){
@@ -352,33 +357,35 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
                                 Log.i("Objeto Face","rotY -> $rotY")
                                 Log.i("Objeto Face","rotZ -> $rotZ")
                                 Log.i("Info Caras","Total caras detectado $conteoCaras")
-
-                                if(infoLugar.estado == "pendiente"){
-                                    infoLugar.estado = "proceso"
-                                }else if(infoLugar.estado == "proceso"){
-                                    infoLugar.estado = "finalizado"
-                                }
-
-                                Log.i("Actualizando","Estado del lugar de trabajo")
-                                var userUID = firebaseAuth!!.currentUser?.uid.toString()
-                                val databaseReference = FirebaseDatabase.getInstance().getReference("Direcciones")
-                                databaseReference.child(userUID!!)
-                                    .child(infoLugar.uid)
-                                    .setValue(infoLugar)
-                                    .addOnSuccessListener {
-                                        Toast.makeText(context, "Dirección de trabajo actualizada con éxito", Toast.LENGTH_SHORT)
-                                            .show()
-                                        Log.i("Actualizado","Estado actualizado del lugar de trabajo")
-                                        findNavController().navigate(R.id.navigation_home)
-                                    }.addOnFailureListener { e ->
-                                        Toast.makeText(
-                                            context,
-                                            "Ocurrio un error al actualizar dirección de trabajo. " + e.message,
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                        Log.i("Error Actualizando","Estado del lugar de trabajo")
-                                    }
                             }
+
+                            if(infoLugar.estado == "pendiente"){
+                                infoLugar.estado = "proceso"
+                                infoLugar.entrada_real = String.format("%02d:%02d", hour, minutes)
+                            }else if(infoLugar.estado == "proceso"){
+                                infoLugar.estado = "finalizado"
+                                infoLugar.salida_real = String.format("%02d:%02d", hour, minutes)
+                            }
+
+                            Log.i("Actualizando","Estado del lugar de trabajo")
+                            var userUID = firebaseAuth!!.currentUser?.uid.toString()
+                            val databaseReference = FirebaseDatabase.getInstance().getReference("Direcciones")
+                            databaseReference.child(userUID!!)
+                                .child(infoLugar.uid)
+                                .setValue(infoLugar)
+                                .addOnSuccessListener {
+                                    Toast.makeText(context, "Dirección de trabajo actualizada con éxito", Toast.LENGTH_SHORT)
+                                        .show()
+                                    Log.i("Actualizado","Estado actualizado del lugar de trabajo")
+                                    findNavController().navigate(R.id.navigation_home)
+                                }.addOnFailureListener { e ->
+                                    Toast.makeText(
+                                        context,
+                                        "Ocurrio un error al actualizar dirección de trabajo. " + e.message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    Log.i("Error Actualizando","Estado del lugar de trabajo")
+                                }
                         }
 
                     }
