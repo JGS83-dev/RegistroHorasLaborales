@@ -27,7 +27,6 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -225,7 +224,9 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
         Datos["estado"] = "pendiente"
 
         val storageRef = storage!!.reference
-        val imagenUsuarioRef = storageRef.child("/imagenes/usuarios/$uid/lugar")
+        val tsLong = System.currentTimeMillis() / 1000
+        val ts = tsLong.toString()
+        val imagenUsuarioRef = storageRef.child("/imagenes/usuarios/$uid/lugar/$ts")
         val stream = FileInputStream(uriImagen?.let { File(it) })
         var uploadTask = imagenUsuarioRef.putStream(stream)
 
