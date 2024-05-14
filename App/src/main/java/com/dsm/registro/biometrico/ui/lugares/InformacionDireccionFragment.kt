@@ -301,7 +301,8 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
 
         var distancia = ubicacionActual!!.distanceTo(ubicacionGuardada!!).roundToInt()
         Log.i("Distancia calculada",distancia.toString())
-        Log.i("Operacion",(distancia.compareTo(5)).toString())
+        Log.i("Ubicacion actual",ubicacionActual.toString())
+        Log.i("Operacion",(distancia.compareTo(40)).toString())
 
         val calendar = Calendar.getInstance()
         val hour: Int = calendar.get(Calendar.HOUR_OF_DAY)
@@ -309,7 +310,7 @@ class InformacionDireccionFragment : Fragment(R.layout.fragment_informacion_dire
 
         Log.i("Info ID",infoLugar.uid)
 
-        if(distancia.compareTo(5) <= 0){
+        if(distancia.compareTo(40) <= 0){
             val image: InputImage
             var conteoCaras = 0
             try {

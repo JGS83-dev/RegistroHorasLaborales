@@ -225,7 +225,7 @@ class RegistrarDireccion : Fragment(R.layout.fragment_registrar_direccion) {
         Datos["estado"] = "pendiente"
 
         val storageRef = storage!!.reference
-        val imagenUsuarioRef = storageRef.child("/imagenes/usuarios/$uid/perfil")
+        val imagenUsuarioRef = storageRef.child("/imagenes/usuarios/$uid/lugar")
         val stream = FileInputStream(uriImagen?.let { File(it) })
         var uploadTask = imagenUsuarioRef.putStream(stream)
 
